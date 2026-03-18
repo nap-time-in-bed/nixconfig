@@ -16,6 +16,8 @@ in
       ./hardware-configuration.nix
       (import "${home-manager}/nixos")
     ];
+  
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -203,7 +205,7 @@ in
             // dwtp
             // drag false
             // drag-lock
-            natural-scroll
+            // natural-scroll
             // accel-speed 0.2
             // accel-profile "flat"
             // scroll-method "two-finger"
@@ -222,8 +224,8 @@ in
         trackpoint {
             // off
             // natural-scroll
-            // accel-speed 0.2
-            // accel-profile "flat"
+            accel-speed 0.2
+            accel-profile "flat"
             // scroll-method "on-button-down"
             // scroll-button 273
             // scroll-button-lock
@@ -666,12 +668,13 @@ in
     git
     curl
     bluetui
-    wifitui
-    wiremix
-    btop
+    #wifitui
+    #wiremix
+    #btop
     ranger
     keyd
     tldr
+    man
     mangohud
     fastfetch
     docker
@@ -693,44 +696,44 @@ in
     heroic
     kdePackages.kdenlive
     lmms
-    localsend
+    #localsend
     keepassxc
     discord
     gearlever
-    pcsx2
-    rpcs3
-    xemu
-    dolphin-emu
-    retroarch-full
-    retroarch-assets
-    ryubing
+    #pcsx2
+    #rpcs3
+    #xemu
+    #dolphin-emu
+    #retroarch-full
+    #retroarch-assets
+    #ryubing
     bottles
     faugus-launcher
-    cemu
+    #cemu
     gimp
     onlyoffice-desktopeditors
-
+    github-desktop
     
-    rofi
-    fuzzel
-    hypridle
-    hyprlock
-    wlogout
-    mako
-    waybar
+    #rofi
+    #fuzzel
+    #hypridle
+    #hyprlock
+    #wlogout
+    #mako
+    #waybar
+    #noctalia-shell
 
-    nwg-look
-    kdePackages.qt6ct
-    gruvbox-gtk-theme
-    gruvbox-plus-icons
-    capitaine-cursors-themed
+    #base16-schemes
+    #nwg-look
+    #kdePackages.qt6ct
+    #gruvbox-gtk-theme
+    #gruvbox-plus-icons
+    #capitaine-cursors-themed
+
+    gnomeExtensions.paperwm
+    gnomeExtensions.status-tray
+    ptyxis
   ];
-  
-  qt = {
-    enable = true;
-    style = "adwaita";
-    platformTheme = "qt5ct";
-  };
 
   # Docker
   virtualisation.docker.enable = true;
@@ -745,12 +748,14 @@ in
   #   enableSSHSupport = true;
   # };
 
-  services.displayManager.ly.enable = true;
+  services.displayManager.ly.enable = false;
   programs.niri = {
-    enable = true;
+    enable = false;
     useNautilus = true;
   };
 
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   
   # Running non-nix executables
   programs.nix-ld = {
@@ -805,9 +810,8 @@ in
         vim.opt.signcolumn = "yes"
         vim.opt.backspace = {"start", "eol", "indent"}
         vim.opt.splitright = true
-        vim.opt.plitbelow = true
+        vim.opt.splitbelow = true
         vim.opt.updatetime = 50
-        vim.opt.colorcolumn = "80"
         vim.opt.clipboard:append("unnamedplus")
         vim.opt.hlsearch = true
         vim.opt.mouse = "a"
@@ -817,7 +821,7 @@ in
   };
 
   programs.foot = {
-    enable = true;
+    enable = false;
     theme = "gruvbox";
     settings = {
       main = {
@@ -906,7 +910,7 @@ in
     enable = true;
     keyboards = {
       default = {
-        ids = [ "0c45:767d:cb84b8cd" ];
+        ids = [ "0c45:767d:cb84b8cd" "0001:0001:09b4e68d"];
         settings = {
           main = {
             rightalt = "layer(nav)";
