@@ -29,7 +29,7 @@ in
   # Kernel Modules
   boot.kernelModules = [ "uinput" ];
 
-  networking.hostName = "nixosdesktop"; # Define your hostname.
+  networking.hostName = "nixoslaptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -681,7 +681,7 @@ in
     fuse
     fuse3
     nextcloud-client
-    ktailctl
+    #ktailctl
     usbutils
     evtest
     SDL2
@@ -713,6 +713,7 @@ in
     gimp
     onlyoffice-desktopeditors
     github-desktop
+    moonlight-qt
     
     #rofi
     #fuzzel
@@ -731,9 +732,16 @@ in
     #capitaine-cursors-themed
 
     gnomeExtensions.paperwm
-    gnomeExtensions.status-tray
+    gnomeExtensions.appindicator
     ptyxis
+    trayscale
   ];
+  
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita-dark";
+  };
 
   # Docker
   virtualisation.docker.enable = true;
@@ -756,6 +764,23 @@ in
 
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+  environment.gnome.excludePackages = with pkgs; [
+    epiphany
+    gnome-console
+  ];
+  programs.dconf.profiles.user.databases = [
+    {
+      lockAll = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            accent-color = "yellow";
+            show-battery-percentage = true;
+        };
+      };
+    }
+  ];
+
   
   # Running non-nix executables
   programs.nix-ld = {
