@@ -194,10 +194,21 @@ in
 
     home-manager.users.guy = {
         home.stateVersion = "25.11";
-
         home.packages = with pkgs; [  ];
+        home.file = {
+            bashrc = {
+                enable = true;
+                force = true;
+                target = ".bashrc";
+                text = ''
+                    fastfetch
+                    alias ffmpegStart='mkdir -p output && for f in *.{mkv,mp4,avi,mov,ts}; do [ -f "$f" ] || continue; ffmpeg -i "$f" -c:v libx265 -b:v 3600k -bufsize 7200k -ac 2 -b:a 128k -c:s copy -map 0 "output/$(basename "${f%.*}").mkv"; done'
+                '';
+            };
+        };
     
     xdg.enable = true;
+
     xdg.configFile."niri/config.kdl".force = true;
     xdg.configFile."niri/config.kdl".text = ''
     // https://niri-wm.github.io/niri/Configuration:-Input
@@ -674,6 +685,7 @@ in
         ranger
         keyd
         tldr
+        ffmpeg-full
         man
         mangohud
         fastfetch
