@@ -19,17 +19,27 @@ in
   
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+
+  # Computer Dependent Settings
+
+  # Kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  # Hostname
+  # networking.hostName = "nixosdesktop" # Desktop
+  networking.hostName = "nixoslaptop"; # Laptop
+
+
+
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
   # Kernel Modules
   boot.kernelModules = [ "uinput" ];
 
-  networking.hostName = "nixoslaptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -122,16 +132,16 @@ in
   };
 
   fonts.packages = with pkgs; [
-    #jetbrains-mono
-    #nerd-fonts.jetbrains-mono
-    #ibm-plex
-    #inter
-    #gohufont
-    #nerd-fonts.gohufont
-    #ubuntu-sans
-    #nerd-fonts.ubuntu
-    fantasque-sans-mono
-    nerd-fonts.fantasque-sans-mono
+    # jetbrains-mono
+    # nerd-fonts.jetbrains-mono
+    # ibm-plex
+    # inter
+    # gohufont
+    # nerd-fonts.gohufont
+    # ubuntu-sans
+    # nerd-fonts.ubuntu
+    # fantasque-sans-mono
+    # nerd-fonts.fantasque-sans-mono
   ];
 
   # Enable sound with pipewire.
@@ -645,16 +655,6 @@ in
     # Waybar Config
     programs.waybar = {
       enable = true;
-      #settings = {
-      #  main = {
-      #    modules-center = ["clock"];
-      #  };
-      #};
-      #style = ''
-      #  * {
-      #    font-family: Fantasque;
-      #  }
-      #'';
     };
   };
 
@@ -668,9 +668,9 @@ in
     git
     curl
     bluetui
-    #wifitui
-    #wiremix
-    #btop
+    # wifitui
+    # wiremix
+    # btop
     ranger
     keyd
     tldr
@@ -681,7 +681,7 @@ in
     fuse
     fuse3
     nextcloud-client
-    #ktailctl
+    # ktailctl
     usbutils
     evtest
     SDL2
@@ -696,44 +696,43 @@ in
     heroic
     kdePackages.kdenlive
     lmms
-    #localsend
+    # localsend
     keepassxc
     discord
     gearlever
-    #pcsx2
-    #rpcs3
-    #xemu
-    #dolphin-emu
-    #retroarch-full
-    #retroarch-assets
-    #ryubing
+    # pcsx2
+    # rpcs3
+    # xemu
+    # dolphin-emu
+    # retroarch-full
+    # retroarch-assets
+    # ryubing
     bottles
     faugus-launcher
-    #cemu
+    # cemu
     gimp
     onlyoffice-desktopeditors
     github-desktop
     moonlight-qt
     
-    #rofi
-    #fuzzel
-    #hypridle
-    #hyprlock
-    #wlogout
-    #mako
-    #waybar
-    #noctalia-shell
+    # rofi
+    # fuzzel
+    # hypridle
+    # hyprlock
+    # wlogout
+    # mako
+    # waybar
+    # noctalia-shell
 
-    #base16-schemes
-    #nwg-look
-    #kdePackages.qt6ct
-    #gruvbox-gtk-theme
-    #gruvbox-plus-icons
-    #capitaine-cursors-themed
+    # base16-schemes
+    # nwg-look
+    # kdePackages.qt6ct
+    # gruvbox-gtk-theme
+    # gruvbox-plus-icons
+    # capitaine-cursors-themed
 
     gnomeExtensions.paperwm
     gnomeExtensions.appindicator
-    ptyxis
     trayscale
   ];
   
@@ -766,7 +765,6 @@ in
   services.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = with pkgs; [
     epiphany
-    gnome-console
   ];
   programs.dconf.profiles.user.databases = [
     {
@@ -877,6 +875,13 @@ in
   # Steam
   programs.steam = {
     enable = true;
+    package = pkgs.steam.override {
+      extraEnv = {
+        MANGOHUD = "1";
+        MANGOHUD_CONFIG = "read_cfg,no_display";
+        PROTON_USE_NTSYNC = true;
+      };
+    };
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
