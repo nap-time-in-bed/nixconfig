@@ -8,198 +8,198 @@
 
 { config, pkgs, ... }:
 let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+    home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
 in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      (import "${home-manager}/nixos")
-    ];
-  
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+    imports =
+        [ # Include the results of the hardware scan.
+            ./hardware-configuration.nix
+            (import "${home-manager}/nixos")
+        ];
+    
+    nix.settings.experimental-features = ["nix-command" "flakes"];
 
 
-  # Computer Dependent Settings
+    # Computer Dependent Settings
 
-  # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
+    # Kernel
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+    # boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # Hostname
-  # networking.hostName = "nixosdesktop" # Desktop
-  networking.hostName = "nixoslaptop"; # Laptop
-
-
+    # Hostname
+    # networking.hostName = "nixosdesktop" # Desktop
+    networking.hostName = "nixoslaptop"; # Laptop
 
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
-  # Kernel Modules
-  boot.kernelModules = [ "uinput" ];
 
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    # Bootloader.
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # Kernel Modules
+    boot.kernelModules = [ "uinput" ];
 
-  # Enable networking
-  networking.networkmanager = {
-    enable = true;
-    plugins = with pkgs; [
-      networkmanager-openvpn
-    ];
-  };
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = false;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
-  # Support for the xbox controller USB dongle
-  hardware.xone.enable = true;
-
-  # Hardware Acceleration
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd # OpenCL
-      libva # VA-API
-    ];
-  };
-  hardware.amdgpu.opencl.enable = true;
-
-  # Load amdgpu driver before boot
-  boot.initrd.kernelModules = [ "amdgpu" ];
-
-  # Bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        # Shows battery charge of connected devices on supported
-        # Bluetooth adapters. Defaults to 'false'.
-        Experimental = true;
-        # When enabled other devices can connect faster to us, however
-        # the tradeoff is increased power consumption. Defaults to
-        # 'false'.
-        FastConnectable = false;
-      };
-      Policy = {
-        # Enable all controllers when they are found. This includes
-        # adapters present on start as well as adapters that are plugged
-        # in later on. Defaults to 'true'.
-        AutoEnable = true;
-      };
+    # Enable networking
+    networking.networkmanager = {
+        enable = true;
+        plugins = with pkgs; [
+            networkmanager-openvpn
+        ];
     };
-  };
 
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = with pkgs; [
-      cups-filters
-      cups-browsed
-      gutenprint
-      gutenprint-bin
-      foomatic-db
-      foomatic-db-ppds
-      foomatic-db-nonfree
-      foomatic-db-ppds-withNonfreeDb
-      cups-bjnp
+    # Set your time zone.
+    time.timeZone = "America/Toronto";
+
+    # Select internationalisation properties.
+    i18n.defaultLocale = "en_CA.UTF-8";
+
+    # Enable the X11 windowing system.
+    # You can disable this if you're only using the Wayland session.
+    services.xserver.enable = false;
+
+    # Configure keymap in X11
+    services.xserver.xkb = {
+        layout = "us";
+        variant = "";
+    };
+
+    # Support for the xbox controller USB dongle
+    hardware.xone.enable = true;
+
+    # Hardware Acceleration
+    hardware.graphics = {
+        enable = true;
+        enable32Bit = true;
+        extraPackages = with pkgs; [
+            rocmPackages.clr.icd # OpenCL
+            libva # VA-API
+        ];
+    };
+    hardware.amdgpu.opencl.enable = true;
+
+    # Load amdgpu driver before boot
+    boot.initrd.kernelModules = [ "amdgpu" ];
+
+    # Bluetooth
+    hardware.bluetooth = {
+        enable = true;
+        powerOnBoot = true;
+        settings = {
+            General = {
+                # Shows battery charge of connected devices on supported
+                # Bluetooth adapters. Defaults to 'false'.
+                Experimental = true;
+                # When enabled other devices can connect faster to us, however
+                # the tradeoff is increased power consumption. Defaults to
+                # 'false'.
+                FastConnectable = false;
+            };
+            Policy = {
+                # Enable all controllers when they are found. This includes
+                # adapters present on start as well as adapters that are plugged
+                # in later on. Defaults to 'true'.
+                AutoEnable = true;
+            };
+        };
+    };
+
+    # Enable CUPS to print documents.
+    services.printing = {
+        enable = true;
+        drivers = with pkgs; [
+            cups-filters
+            cups-browsed
+            gutenprint
+            gutenprint-bin
+            foomatic-db
+            foomatic-db-ppds
+            foomatic-db-nonfree
+            foomatic-db-ppds-withNonfreeDb
+            cups-bjnp
+        ];
+    };
+    services.avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true;
+    };
+
+    fonts.packages = with pkgs; [
+        # jetbrains-mono
+        # nerd-fonts.jetbrains-mono
+        # ibm-plex
+        # inter
+        # gohufont
+        # nerd-fonts.gohufont
+        # ubuntu-sans
+        # nerd-fonts.ubuntu
+        # fantasque-sans-mono
+        # nerd-fonts.fantasque-sans-mono
     ];
-  };
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
 
-  fonts.packages = with pkgs; [
-    # jetbrains-mono
-    # nerd-fonts.jetbrains-mono
-    # ibm-plex
-    # inter
-    # gohufont
-    # nerd-fonts.gohufont
-    # ubuntu-sans
-    # nerd-fonts.ubuntu
-    # fantasque-sans-mono
-    # nerd-fonts.fantasque-sans-mono
-  ];
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    jack.enable = false;
+    # Enable sound with pipewire.
+    services.pulseaudio.enable = false;
+    security.rtkit.enable = true;
+    services.pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+        # If you want to use JACK applications, uncomment this
+        jack.enable = false;
 
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
+        # use the example session manager (no others are packaged yet so this is enabled by default,
+        # no need to redefine it in your config for now)
+        #media-session.enable = true;
+    };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+    # Enable touchpad support (enabled default in most desktopManager).
+    # services.xserver.libinput.enable = true;
 
-  # Auto Mounting Drives
-  # fileSystems."/run/media/guy/SSD2TB" = {
-  #   device = "/dev/disk/by-uuid/860970f3-86e1-453f-a632-ae915cb62195";
-  #   fsType = "btrfs";
-  #   options = [ # If you don't have this options attribute, it'll default to "defaults"
-  #     # boot options for fstab. Search up fstab mount options you can use
-  #     "users" # Allows any user to mount and unmount
-  #     "nofail" # Prevent system from failing if this drive doesn't mount
-  #     "exec"
-  #   ];
-  # };
+    # Auto Mounting Drives
+    # fileSystems."/run/media/guy/SSD2TB" = {
+    #   device = "/dev/disk/by-uuid/860970f3-86e1-453f-a632-ae915cb62195";
+    #   fsType = "btrfs";
+    #   options = [ # If you don't have this options attribute, it'll default to "defaults"
+    #     # boot options for fstab. Search up fstab mount options you can use
+    #     "users" # Allows any user to mount and unmount
+    #     "nofail" # Prevent system from failing if this drive doesn't mount
+    #     "exec"
+    #   ];
+    # };
 
-  # Security
-  security.sudo.extraConfig = ''
+    # Security
+    security.sudo.extraConfig = ''
     Defaults pwfeedback # Makes typed password visible as asterisks
     Defaults timestamp_timeout=120 # Only ask for password every 2h
   '';
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.guy = {
-    isNormalUser = true;
-    description = "Guy";
-    extraGroups = [ "networkmanager" "wheel" "docker" "audio"];
-    packages = with pkgs; [
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.guy = {
+        isNormalUser = true;
+        description = "Guy";
+        extraGroups = [ "networkmanager" "wheel" "docker" "audio"];
+        packages = with pkgs; [
 
-    ];
-  };
+        ];
+    };
 
-  home-manager.users.guy = {
-    home.stateVersion = "25.11";
+    home-manager.users.guy = {
+        home.stateVersion = "25.11";
 
-    home.packages = with pkgs; [  ];
-  
-  xdg.enable = true;
-  xdg.configFile."niri/config.kdl".force = true;
-  xdg.configFile."niri/config.kdl".text = ''
+        home.packages = with pkgs; [  ];
+    
+    xdg.enable = true;
+    xdg.configFile."niri/config.kdl".force = true;
+    xdg.configFile."niri/config.kdl".text = ''
     // https://niri-wm.github.io/niri/Configuration:-Input
     input {
         keyboard {
@@ -501,9 +501,9 @@ in
     }
   '';
 
-  xdg.configFile."waybar/config.jsonc".force = true;
-  # https://github.com/MBestKing/dotfiles/blob/main/waybar/config.jsonc
-  xdg.configFile."waybar/config.jsonc".text = ''
+    xdg.configFile."waybar/config.jsonc".force = true;
+    # https://github.com/MBestKing/dotfiles/blob/main/waybar/config.jsonc
+    xdg.configFile."waybar/config.jsonc".text = ''
     {
         "layer": "top",
         "mod": "dock",
@@ -586,8 +586,8 @@ in
     };
   '';
 
-  xdg.configFile."waybar/style.css".force = true;
-  xdg.configFile."waybar/style.css".text = ''
+    xdg.configFile."waybar/style.css".force = true;
+    xdg.configFile."waybar/style.css".text = ''
   
     * {
       font-family: "Fantasque Sans Mono";
@@ -619,8 +619,8 @@ in
 
   '';
 
-  xdg.configFile."fuzzel/fuzzel.ini".force = true;
-  xdg.configFile."fuzzel/fuzzel.ini".text = ''
+    xdg.configFile."fuzzel/fuzzel.ini".force = true;
+    xdg.configFile."fuzzel/fuzzel.ini".text = ''
     font='Fantasque Sans Mono'
     dpi-aware=no
     prompt=">  "
@@ -652,165 +652,165 @@ in
     radius=2
   '';
 
-    # Waybar Config
-    programs.waybar = {
-      enable = true;
-    };
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    wget
-    git
-    curl
-    bluetui
-    # wifitui
-    # wiremix
-    # btop
-    ranger
-    keyd
-    tldr
-    man
-    mangohud
-    fastfetch
-    docker
-    fuse
-    fuse3
-    nextcloud-client
-    # ktailctl
-    usbutils
-    evtest
-    SDL2
-    freerdp
-    libblockdev
-    libnvme
-    docker
-    nix-prefetch-github
-    love
-    protonplus
-    vlc
-    heroic
-    kdePackages.kdenlive
-    lmms
-    # localsend
-    keepassxc
-    discord
-    gearlever
-    # pcsx2
-    # rpcs3
-    # xemu
-    # dolphin-emu
-    # retroarch-full
-    # retroarch-assets
-    # ryubing
-    bottles
-    faugus-launcher
-    # cemu
-    gimp
-    onlyoffice-desktopeditors
-    github-desktop
-    moonlight-qt
-    
-    # rofi
-    # fuzzel
-    # hypridle
-    # hyprlock
-    # wlogout
-    # mako
-    # waybar
-    # noctalia-shell
-
-    # base16-schemes
-    # nwg-look
-    # kdePackages.qt6ct
-    # gruvbox-gtk-theme
-    # gruvbox-plus-icons
-    # capitaine-cursors-themed
-
-    gnomeExtensions.paperwm
-    gnomeExtensions.appindicator
-    trayscale
-  ];
-  
-  qt = {
-    enable = true;
-    platformTheme = "gnome";
-    style = "adwaita-dark";
-  };
-
-  # Docker
-  virtualisation.docker.enable = true;
-  #virtualisation.docker.storageDriver = "btrfs";
-  #users.extraGroups.docker.members = [ "guy" ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  services.displayManager.ly.enable = false;
-  programs.niri = {
-    enable = false;
-    useNautilus = true;
-  };
-
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-  environment.gnome.excludePackages = with pkgs; [
-    epiphany
-  ];
-  programs.dconf.profiles.user.databases = [
-    {
-      lockAll = true;
-      settings = {
-        "org/gnome/desktop/interface" = {
-            color-scheme = "prefer-dark";
-            accent-color = "yellow";
-            show-battery-percentage = true;
+        # Waybar Config
+        programs.waybar = {
+            enable = true;
         };
-      };
-    }
-  ];
+    };
 
-  
-  # Running non-nix executables
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      ## Put here any library that is required when running a package
-      ## ...
-      ## Uncomment if you want to use the libraries provided by default in the steam distribution
-      ## but this is quite far from being exhaustive
-      ## https://github.com/NixOS/nixpkgs/issues/354513
-      (pkgs.runCommand "steamrun-lib" {} "mkdir $out; ln -s ${pkgs.steam-run.fhsenv}/usr/lib64 $out/lib")
-      icu
-      libICE
-      libSM
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
+
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+        wget
+        git
+        curl
+        bluetui
+        # wifitui
+        # wiremix
+        # btop
+        ranger
+        keyd
+        tldr
+        man
+        mangohud
+        fastfetch
+        docker
+        fuse
+        fuse3
+        nextcloud-client
+        # ktailctl
+        usbutils
+        evtest
+        SDL2
+        freerdp
+        libblockdev
+        libnvme
+        docker
+        nix-prefetch-github
+        love
+        protonplus
+        vlc
+        heroic
+        kdePackages.kdenlive
+        lmms
+        # localsend
+        keepassxc
+        discord
+        gearlever
+        # pcsx2
+        # rpcs3
+        # xemu
+        # dolphin-emu
+        # retroarch-full
+        # retroarch-assets
+        # ryubing
+        bottles
+        faugus-launcher
+        # cemu
+        gimp
+        onlyoffice-desktopeditors
+        github-desktop
+        moonlight-qt
+        
+        # rofi
+        # fuzzel
+        # hypridle
+        # hyprlock
+        # wlogout
+        # mako
+        # waybar
+        # noctalia-shell
+
+        # base16-schemes
+        # nwg-look
+        # kdePackages.qt6ct
+        # gruvbox-gtk-theme
+        # gruvbox-plus-icons
+        # capitaine-cursors-themed
+
+        gnomeExtensions.paperwm
+        gnomeExtensions.appindicator
+        trayscale
     ];
-  };
+    
+    qt = {
+        enable = true;
+        platformTheme = "gnome";
+        style = "adwaita-dark";
+    };
 
-  # Disable Nano
-  programs.nano.enable = false;
+    # Docker
+    virtualisation.docker.enable = true;
+    #virtualisation.docker.storageDriver = "btrfs";
+    #users.extraGroups.docker.members = [ "guy" ];
 
-  # Neovim / Nvim
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    configure = {
-      customRC = ''
+    # Some programs need SUID wrappers, can be configured further or are
+    # started in user sessions.
+    # programs.mtr.enable = true;
+    # programs.gnupg.agent = {
+    #   enable = true;
+    #   enableSSHSupport = true;
+    # };
+
+    services.displayManager.ly.enable = false;
+    programs.niri = {
+        enable = false;
+        useNautilus = true;
+    };
+
+    services.displayManager.gdm.enable = true;
+    services.desktopManager.gnome.enable = true;
+    environment.gnome.excludePackages = with pkgs; [
+        epiphany
+    ];
+    programs.dconf.profiles.user.databases = [
+        {
+            lockAll = true;
+            settings = {
+                "org/gnome/desktop/interface" = {
+                        color-scheme = "prefer-dark";
+                        accent-color = "yellow";
+                        show-battery-percentage = true;
+                };
+            };
+        }
+    ];
+
+    
+    # Running non-nix executables
+    programs.nix-ld = {
+        enable = true;
+        libraries = with pkgs; [
+            ## Put here any library that is required when running a package
+            ## ...
+            ## Uncomment if you want to use the libraries provided by default in the steam distribution
+            ## but this is quite far from being exhaustive
+            ## https://github.com/NixOS/nixpkgs/issues/354513
+            (pkgs.runCommand "steamrun-lib" {} "mkdir $out; ln -s ${pkgs.steam-run.fhsenv}/usr/lib64 $out/lib")
+            icu
+            libICE
+            libSM
+        ];
+    };
+
+    # Disable Nano
+    programs.nano.enable = false;
+
+    # Neovim / Nvim
+    programs.neovim = {
+        enable = true;
+        defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        configure = {
+            customRC = ''
         " here your custom VimScript configuration goes!
         colorscheme retrobox
       '';
-      customLuaRC = ''
+            customLuaRC = ''
         -- here your custom Lua configuration goes!
         vim.opt.number = true
         vim.opt.swapfile = false
@@ -840,139 +840,139 @@ in
         vim.opt.mouse = "a"
         vim.g.editorconfig = true
       '';
-    };
-  };
-
-  programs.foot = {
-    enable = false;
-    theme = "gruvbox";
-    settings = {
-      main = {
-        font = "Fantasque Sans Mono:size=13";
-      };
-      scrollback = {
-        lines = 1000000;
-      };
-    };
-  }; 
-
-  # Gamemode
-  programs.gamemode.enable = true;
-
-  # Gamescope
-  programs.gamescope = {
-    enable = true;
-    capSysNice = true;
-  };
-
-  # AppImages
-  programs.appimage.enable = true;
-  programs.appimage.binfmt = true;
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Steam
-  programs.steam = {
-    enable = true;
-    package = pkgs.steam.override {
-      extraEnv = {
-        MANGOHUD = "1";
-        MANGOHUD_CONFIG = "read_cfg,no_display";
-        PROTON_USE_NTSYNC = true;
-      };
-    };
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-    gamescopeSession.enable = true;
-    protontricks.enable = true; # Install Protontricks
-  };
-
-  # OBS Studio
-  programs.obs-studio = {
-    enable = true;
-    # optional Nvidia hardware acceleration
-    package = (
-      pkgs.obs-studio.override {
-        #cudaSupport = true;
-      }
-    );
-    plugins = with pkgs.obs-studio-plugins; [
-      wlrobs
-      obs-backgroundremoval
-      obs-pipewire-audio-capture
-      obs-vaapi #optional AMD hardware acceleration
-      obs-gstreamer
-      obs-vkcapture
-    ];
-  };
-
-  # List services that you want to enable:
-
-  # OpenSSH
-  services.openssh.enable = true;
-
-  # Firmware Updates
-  services.fwupd.enable = true;
-
-  # Flatpak
-  services.flatpak = {
-    enable = true;
-  };
-
-  # Tailscale
-  services.tailscale.enable = true;
-
-  # Imput Plumber
-  services.inputplumber.enable = true;
-
-  # Sunshine
-  services.sunshine = {
-    enable = false;
-    autoStart = true;
-    capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
-    openFirewall = true;
-  };
-
-  # Keyd
-  services.keyd = {
-    enable = true;
-    keyboards = {
-      default = {
-        ids = [ "0c45:767d:cb84b8cd" "0001:0001:09b4e68d"];
-        settings = {
-          main = {
-            rightalt = "layer(nav)";
-          };
-          nav = {
-            h = "left";
-            j = "down";
-            k = "up";
-            l = "right";
-            q = "home";
-            e = "end";
-            backspace = "delete";
-          };
         };
-      };
     };
-  };
+
+    programs.foot = {
+        enable = false;
+        theme = "gruvbox";
+        settings = {
+            main = {
+                font = "Fantasque Sans Mono:size=13";
+            };
+            scrollback = {
+                lines = 1000000;
+            };
+        };
+    }; 
+
+    # Gamemode
+    programs.gamemode.enable = true;
+
+    # Gamescope
+    programs.gamescope = {
+        enable = true;
+        capSysNice = true;
+    };
+
+    # AppImages
+    programs.appimage.enable = true;
+    programs.appimage.binfmt = true;
+
+    # Install firefox.
+    programs.firefox.enable = true;
+
+    # Steam
+    programs.steam = {
+        enable = true;
+        package = pkgs.steam.override {
+            extraEnv = {
+                MANGOHUD = "1";
+                MANGOHUD_CONFIG = "read_cfg,no_display";
+                PROTON_USE_NTSYNC = true;
+            };
+        };
+        remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+        dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+        localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+        gamescopeSession.enable = true;
+        protontricks.enable = true; # Install Protontricks
+    };
+
+    # OBS Studio
+    programs.obs-studio = {
+        enable = true;
+        # optional Nvidia hardware acceleration
+        package = (
+            pkgs.obs-studio.override {
+                #cudaSupport = true;
+            }
+        );
+        plugins = with pkgs.obs-studio-plugins; [
+            wlrobs
+            obs-backgroundremoval
+            obs-pipewire-audio-capture
+            obs-vaapi #optional AMD hardware acceleration
+            obs-gstreamer
+            obs-vkcapture
+        ];
+    };
+
+    # List services that you want to enable:
+
+    # OpenSSH
+    services.openssh.enable = true;
+
+    # Firmware Updates
+    services.fwupd.enable = true;
+
+    # Flatpak
+    services.flatpak = {
+        enable = true;
+    };
+
+    # Tailscale
+    services.tailscale.enable = true;
+
+    # Imput Plumber
+    services.inputplumber.enable = true;
+
+    # Sunshine
+    services.sunshine = {
+        enable = false;
+        autoStart = true;
+        capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
+        openFirewall = true;
+    };
+
+    # Keyd
+    services.keyd = {
+        enable = true;
+        keyboards = {
+            default = {
+                ids = [ "0c45:767d:cb84b8cd" "0001:0001:09b4e68d"];
+                settings = {
+                    main = {
+                        rightalt = "layer(nav)";
+                    };
+                    nav = {
+                        h = "left";
+                        j = "down";
+                        k = "up";
+                        l = "right";
+                        q = "home";
+                        e = "end";
+                        backspace = "delete";
+                    };
+                };
+            };
+        };
+    };
 
 
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    # networking.firewall.enable = false;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+    # This value determines the NixOS release from which the default
+    # settings for stateful data, like file locations and database versions
+    # on your system were taken. It‘s perfectly fine and recommended to leave
+    # this value at the release version of the first install of this system.
+    # Before changing this value read the documentation for this option
+    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+    system.stateVersion = "25.11"; # Did you read the comment?
 
 }
