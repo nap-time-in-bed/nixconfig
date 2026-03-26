@@ -202,7 +202,7 @@ in
                 target = ".bashrc";
                 text = ''
                     fastfetch
-                    alias ffmpegStart='mkdir -p output && for f in *.{mkv,mp4,avi,mov,ts}; do [ -f "$f" ] || continue; ffmpeg -i "$f" -c:v libx265 -b:v 3600k -bufsize 7200k -ac 2 -b:a 128k -c:s copy -map 0 "output/$(basename "${f%.*}").mkv"; done'
+                    alias ffmpegStart='mkdir -p output && for f in *.{mkv,mp4,avi,mov,ts}; do [ -f "$f" ] || continue; ffmpeg -i "$f" -c:v libx265 -preset slow -b:v 3500k -bufsize 7000k -c:a libopus -ac 2 -b:a 96k -application audio -c:s copy -map 0 "output/$(basename "${f%.*}").mkv"; done'
                 '';
             };
         };
