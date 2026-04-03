@@ -165,16 +165,16 @@ in
     # services.xserver.libinput.enable = true;
 
     # Auto Mounting Drives
-    # fileSystems."/run/media/guy/SSD2TB" = {
-    #   device = "/dev/disk/by-uuid/860970f3-86e1-453f-a632-ae915cb62195";
-    #   fsType = "btrfs";
-    #   options = [ # If you don't have this options attribute, it'll default to "defaults"
-    #     # boot options for fstab. Search up fstab mount options you can use
-    #     "users" # Allows any user to mount and unmount
-    #     "nofail" # Prevent system from failing if this drive doesn't mount
-    #     "exec"
-    #   ];
-    # };
+    fileSystems."/run/media/guy/SSD2TB" = {
+        device = "/dev/disk/by-uuid/860970f3-86e1-453f-a632-ae915cb62195";
+        fsType = "btrfs";
+        options = [ # If you don't have this options attribute, it'll default to "defaults"
+            # boot options for fstab. Search up fstab mount options you can use
+            "users" # Allows any user to mount and unmount
+            "nofail" # Prevent system from failing if this drive doesn't mount
+            "exec"
+        ];
+    };
 
     # Security
     security.sudo.extraConfig = ''
