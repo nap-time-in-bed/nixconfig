@@ -675,14 +675,10 @@ in
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
+        # Utilities (Non-Gui Programs)
         wget
         git
         curl
-        bluetui
-        # wifitui
-        # wiremix
-        # btop
-        ranger
         keyd
         tldr
         ffmpeg-full
@@ -692,8 +688,6 @@ in
         docker
         fuse
         fuse3
-        nextcloud-client
-        # ktailctl
         usbutils
         evtest
         SDL2
@@ -703,15 +697,32 @@ in
         docker
         nix-prefetch-github
         love
+        sgdboop
+
+        # TUI
+        ranger
+        # bluetui
+        # wifitui
+        # wiremix
+        # btop
+
+        # GUI
+        nextcloud-client
         protonplus
-        vlc
         heroic
         kdePackages.kdenlive
         lmms
-        # localsend
         keepassxc
         discord
         gearlever
+        faugus-launcher
+        gimp
+        onlyoffice-desktopeditors
+        github-desktop
+        moonlight-qt
+        # ktailctl
+        # vlc
+        # localsend
         # pcsx2
         # rpcs3
         # xemu
@@ -719,14 +730,10 @@ in
         # retroarch-full
         # retroarch-assets
         # ryubing
-        bottles
-        faugus-launcher
         # cemu
-        gimp
-        onlyoffice-desktopeditors
-        github-desktop
-        moonlight-qt
-        
+        # bottles
+
+        # Niri
         # rofi
         # fuzzel
         # hypridle
@@ -736,6 +743,7 @@ in
         # waybar
         # noctalia-shell
 
+        # Styling
         # base16-schemes
         # nwg-look
         # kdePackages.qt6ct
@@ -743,6 +751,7 @@ in
         # gruvbox-plus-icons
         # capitaine-cursors-themed
 
+        # GNOME
         gnomeExtensions.paperwm
         gnomeExtensions.appindicator
         trayscale
@@ -756,8 +765,8 @@ in
 
     # Docker
     virtualisation.docker.enable = true;
-    #virtualisation.docker.storageDriver = "btrfs";
-    #users.extraGroups.docker.members = [ "guy" ];
+    # virtualisation.docker.storageDriver = "btrfs";
+    # users.extraGroups.docker.members = [ "guy" ];
 
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
@@ -892,8 +901,13 @@ in
                 MANGOHUD = "1";
                 MANGOHUD_CONFIG = "read_cfg,no_display";
                 PROTON_USE_NTSYNC = true;
+                PROTON_NO_ESYNC = true;
+                PROTON_NO_FSYNC = true;
             };
         };
+        extraCompatPackages = with pkgs; [
+            proton-ge-bin
+        ]
         remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
         dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
         localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
